@@ -1,4 +1,9 @@
 ﻿FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
+#install NodeJS
+RUN apt-get update && apt-get install -y curl ca-certificates gnupg
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - &&\
+	apt-get install -y nodejs
+RUN npm install -g gamedig@^5.0.0-beta.0
 USER $APP_UID
 WORKDIR /app
 

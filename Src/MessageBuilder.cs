@@ -40,7 +40,13 @@ public static class MessageBuilder {
             embed.AddField($"{server.Name}: {status}", $"```{server.GetEmbedString(server.StatusTemplate,server.LastResponse)}```");
         }
 
-        embed.WithColor(Color.Orange);
+        var colorString = "E67E22";
+        if (settings.Discord.EmbedMessageColor != null) {
+            colorString = settings.Discord.EmbedMessageColor.Replace("#", "").Trim();
+        }
+        var color = uint.Parse(colorString, System.Globalization.NumberStyles.HexNumber);
+        
+        embed.WithColor(new Color(color));
         embed.WithCurrentTimestamp();
         return embed.Build();
     }

@@ -1,0 +1,7 @@
+﻿services:
+  fawxgamedigbot:
+    container_name: gamedigbot
+    image: destarianon/fawxgamedigbot
+    restart: unless-stopped
+    volumes:
+      - ./appsettings.json:/app/appsettings.json

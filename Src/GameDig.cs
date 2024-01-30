@@ -16,7 +16,7 @@ public sealed class GameDig {
     }
 
     public async Task<DigResponse> Dig(GameServer server) {
-        _logger.LogInformation($"Digging server: {server.Name} at {server.ConnectionString()}");
+        _logger.LogDebug($"Digging server: {server.Name} at {server.ConnectionString()}");
 
         DigResponse? response;
 
@@ -37,7 +37,7 @@ public sealed class GameDig {
             };
 
             if (response != null) {
-                response.ParseRaw();
+                response.ParseRaw(_logger);
                 response.online = true;
             }
         }

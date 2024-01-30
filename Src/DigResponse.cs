@@ -17,7 +17,7 @@ public class DigResponse {
     public int queryPort { get; set; }
     public Dictionary<string, object>? raw { get; set; }
     
-    public virtual void ParseRaw() {}
+    public virtual void ParseRaw(ILogger logger) {}
 }
 
 public sealed class PalworldDigResponse : DigResponse {
@@ -30,12 +30,12 @@ public sealed class PalworldDigResponse : DigResponse {
     
     public Dictionary<string,object>? attributes { get; set; }
 
-    public override void ParseRaw() {
+    public override void ParseRaw(ILogger logger) {
         if (raw != null && raw.TryGetValue("attributes", out var jsonObject)) {
+            //logger.LogDebug($"attributes json: {jsonObject}");
             attributes = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonObject.ToString());
-            numplayers = (int)attributes["numplayers"];
-            version = (string)attributes["version"];
-            days = (int)attributes["days"];
+            version = (string)attributes["VERSION_s"].ToString();
+            days = int.Parse(attributes["DAYS_l"].ToString());
         }
     }
 }

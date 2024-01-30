@@ -15,6 +15,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Docs\"/>
+        <Folder Include="Docs\Images\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update=".dockerignore">
+        <DependentUpon>Dockerfile</DependentUpon>
+      </None>
     </ItemGroup>
 </Project>

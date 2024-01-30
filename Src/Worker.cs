@@ -14,6 +14,8 @@ public class Worker(ILogger<Worker> logger, IOptions<AppSettings> settings, Disc
         while (!discord.IsReady && !stoppingToken.IsCancellationRequested) {
             await Task.Delay(500, stoppingToken);
         }
+
+        await discord.GetExistingEmbedMessage();
         
         var servers = settings.Value.GameServers;
         logger.LogInformation($"Found {servers.Count} servers to monitor");
@@ -34,7 +36,7 @@ public class Worker(ILogger<Worker> logger, IOptions<AppSettings> settings, Disc
             }
 
             var embed = MessageBuilder.BuildEmbed(servers, settings.Value);
-            discord.UpdateStatusMessage(embed);
+            await discord.UpdateStatusMessage(embed);
 
             await Task.Delay((int)(settings.Value.RefreshInterval * 1000), stoppingToken);
         }

@@ -35,12 +35,10 @@ public class Discord {
         return Task.CompletedTask;
     }
 
-    private Task Ready() {
+    private async Task Ready() {
         IsReady = true;
         BotId = _client.CurrentUser.Id;
         _logger.LogDebug($"Connected to Discord with id {BotId}");
-        GetExistingEmbedMessage();
-        return Task.CompletedTask;
     }
 
     public async Task Start() {
@@ -56,12 +54,12 @@ public class Discord {
         await _client.LogoutAsync();
     }
 
-    private async void GetExistingEmbedMessage() {
+    public async Task GetExistingEmbedMessage() {
         _logger.LogDebug("Looking for an existing status message...");
         var channel = _client.GetChannel(_settings.Value.Discord.EmbedChannelId);
         if (channel is IMessageChannel mchannel) {
-            var latestMessage = await mchannel.GetMessagesAsync(1).FlattenAsync();
-            _logger.LogDebug($"Latest message in channel {channel.Id} is {latestMessage.Last().Id}");
+            var latestMessages = await mchannel.GetMessagesAsync(10).FlattenAsync();
+            _logger.LogDebug($"Latest message in channel {channel.Id} is {latestMessages.First().Id}");
             var searchMessages = await mchannel.GetMessagesAsync(100).FlattenAsync();
 
             var foundLast = false;
@@ -109,7 +107,7 @@ public class Discord {
         return 0;
     }
 
-    private async void UpdateEmbedMessage(ulong channelId, ulong messageId, Embed embed) {
+    private async Task UpdateEmbedMessage(ulong channelId, ulong messageId, Embed embed) {
         if (channelId != 0) {
             var channel = _client.GetChannel(channelId);
             if (channel is IMessageChannel mchannel) {
@@ -126,9 +124,9 @@ public class Discord {
         }
     }
 
-    public async void UpdateStatusMessage(Embed embed) {
+    public async Task UpdateStatusMessage(Embed embed) {
         if (EmbedMessageId != 0) {
-            UpdateEmbedMessage(_settings.Value.Discord.EmbedChannelId, EmbedMessageId, embed);
+            await UpdateEmbedMessage(_settings.Value.Discord.EmbedChannelId, EmbedMessageId, embed);
         } else {
             _logger.LogInformation("No existing status message found, creating a new one!");
             EmbedMessageId = await SendEmbedMessage(_settings.Value.Discord.EmbedChannelId, embed);

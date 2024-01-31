@@ -22,7 +22,6 @@ servers, as well as up/down notifications in game specific text channels.
 
 ## Also on [Docker Hub](https://hub.docker.com/repository/docker/destarianon/fawxgamedigbot/general)
 
----
 # Usage:
 This will outline the basics of deploying the bot to a single docker host.
 > Support for K8S, Swarm or other advanced configurations will **not** be provided.
@@ -83,7 +82,6 @@ Once you've created your `docker-compose.yml` file, you can deploy it using the 
 docker-compose up -d
 ```
 
----
 # FAQ:
 ### My bot is creating multiple embedded status messages.
 + Make sure the status channel is not being used for anything other than dynamic status messages. If there are too many messages in this channel, the bot will lose track and may create duplicates.

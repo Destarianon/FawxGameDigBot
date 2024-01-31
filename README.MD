@@ -1,6 +1,5 @@
 ﻿# FAWX GameDig Bot
 
----
 This Discord bot provides a configurable solution for game server montioring
 by providing a unified embedded status message for all your
 servers, as well as up/down notifications in game specific text channels.
@@ -20,6 +19,8 @@ servers, as well as up/down notifications in game specific text channels.
 + Highly configurable, including a customizable statistics format per server.
 + Optionally sends up/down notifications to a game-specific channel.
 + Easy to deploy and lightweight.
+
+## Also on [Docker Hub] (https://hub.docker.com/repository/docker/destarianon/fawxgamedigbot/general)
 
 ---
 # Usage:

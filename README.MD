@@ -88,8 +88,8 @@ docker-compose up -d
 + Make sure the status channel is not being used for anything other than dynamic status messages. If there are too many messages in this channel, the bot will lose track and may create duplicates.
 
 ### My bot is crashing on startup.
-+ Make sure your configuration file is valid JSON. You can use a tool like [JSONLint](https://jsonlint.com/) to validate your configuration file.
-+ Make sure your configuration settings are all correct.
++ Make sure you have an `appsettings.json` file mounted to the docker container in the correct place.
++ Make sure your configuration file is valid JSON and all the settings are correct. You can use a tool like [JSONLint](https://jsonlint.com/) to validate your configuration file.
 + You can use the `docker logs` command to view the logs from the bot container. This may provide more information about the error.
 + You can update the "Default" log level in the `appsettings.json` file to `Debug` to get more detailed logging.
 

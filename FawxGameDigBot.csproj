@@ -9,8 +9,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="CliWrap" Version="3.6.6" />
-        <PackageReference Include="Discord.Net" Version="3.13.0" />
+        <PackageReference Include="CliWrap" Version="3.6.6"/>
+        <PackageReference Include="Discord.Net" Version="3.13.0"/>
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="docker-compose.yml" />
     </ItemGroup>
 </Project>

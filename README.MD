@@ -20,7 +20,7 @@ servers, as well as up/down notifications in game specific text channels.
 + Optionally sends up/down notifications to a game-specific channel.
 + Easy to deploy and lightweight.
 
-## Also on [Docker Hub] (https://hub.docker.com/repository/docker/destarianon/fawxgamedigbot/general)
+## Also on [Docker Hub](https://hub.docker.com/repository/docker/destarianon/fawxgamedigbot/general)
 
 ---
 # Usage:

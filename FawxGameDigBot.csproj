@@ -15,8 +15,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update=".dockerignore">
-        <DependentUpon>Dockerfile</DependentUpon>
-      </None>
+      <None Remove="docker-compose.yml" />
     </ItemGroup>
 </Project>

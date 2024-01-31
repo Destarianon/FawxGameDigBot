@@ -3,12 +3,14 @@ using Microsoft.Extensions.Options;
 
 namespace FawxGameDigBot;
 
-public class Worker(ILogger<Worker> logger, IOptions<AppSettings> settings, Discord discord, GameDig dig) : BackgroundService {
+public class Worker(ILogger<Worker> logger, IOptions<AppSettings> settings, Discord discord, GameDig dig, IHostApplicationLifetime hostApplicationLifetime) : BackgroundService {
     
     protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
 
-        //wait forever ONLY FOR TESTING
-        //await Task.Delay(-1, stoppingToken);
+        if (settings.Value.Discord == null || settings.Value.GameServers == null) {
+            logger.LogCritical("Configuration 'appsettings.json' file not available!");
+            hostApplicationLifetime.StopApplication();
+        }
         
         await discord.Start();
         while (!discord.IsReady && !stoppingToken.IsCancellationRequested) {

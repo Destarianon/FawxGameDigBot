@@ -23,5 +23,9 @@
 **/values.dev.yaml
 LICENSE
 README.md
+/Docs
 **/Docs
-**/Src
+appsettings.example.json
+**/appsettings.example.json
+appsettings.json
+**/appsettings.json

@@ -12,6 +12,7 @@ public class DigResponse {
     public bool password { get; set; }
     public int numplayers { get; set; }
     public int maxplayers { get; set; }
+    public List<string> players { get; set; }
     public string? connect { get; set; }
     public int ping { get; set; }
     public int queryPort { get; set; }
@@ -22,20 +23,24 @@ public class DigResponse {
 
 public sealed class PalworldDigResponse : DigResponse {
     
-    [JsonIgnore]
     public string? version { get; set; }
     
     [JsonIgnore]
-    public int days { get; set; }
+    public int serverfps { get; set; }
     
-    public Dictionary<string,object>? attributes { get; set; }
+    [JsonIgnore]
+    public int uptime { get; set; }
+    
+    public Dictionary<string,object>? metrics { get; set; }
+    
+    public Dictionary<string,object>? settings { get; set; }
 
     public override void ParseRaw(ILogger logger) {
-        if (raw != null && raw.TryGetValue("attributes", out var jsonObject)) {
+        if (raw != null && raw.TryGetValue("metrics", out var jsonObject)) {
             //logger.LogDebug($"attributes json: {jsonObject}");
-            attributes = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonObject.ToString());
-            version = (string)attributes["VERSION_s"].ToString();
-            days = int.Parse(attributes["DAYS_l"].ToString());
+            metrics = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonObject.ToString());
+            serverfps = int.Parse(metrics["serverfps"].ToString());
+            uptime = int.Parse(metrics["uptime"].ToString());
         }
     }
 }

@@ -10,7 +10,10 @@ public sealed class GameServer() {
     public int Port { get; set; }
     public ulong DiscordChannelId { get; set; } = 0;
     public string StatusTemplate { get; set; } = "";
+    public string? Username { get; set; }
+    public string? Password { get; set; }
     
+
     [JsonIgnore]
     public DigResponse? LastResponse { get; set; }
     

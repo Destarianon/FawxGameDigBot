@@ -16,11 +16,21 @@ public static class MessageBuilder {
         builder.Replace("{connect}", response.connect);
         builder.Replace("{ping}", response.ping.ToString());
         builder.Replace("{queryPort}", response.queryPort.ToString());
+        var playersString = "[";
+        for (int i = 0; i < response.players.Count; i++) {
+            playersString += $"{response.players[i]}";
+            if (!(i == response.players.Count - 1)) {
+                playersString += ", ";
+            }
+        }
+        playersString += "]";
+        builder.Replace("{players}", playersString);
 
         // Game specific fields
         if (response is PalworldDigResponse tresponse) {
             builder.Replace("{version}", tresponse.version);
-            builder.Replace("{days}", tresponse.days.ToString());
+            builder.Replace("{serverfps}", tresponse.serverfps.ToString());
+            builder.Replace("{uptime}", tresponse.uptime.ToString());
         }
 
         return builder.ToString();

@@ -19,9 +19,15 @@ public sealed class GameDig {
         _logger.LogDebug($"Digging server: {server.Name} at {server.ConnectionString()}");
 
         DigResponse? response;
+        
+        const string executableParameters = $"";
+        var parameters = $"{executableParameters} --type {server.GameType} {server.ConnectionString()}";
+        if (server.GameType == GameTypes.Palworld) {
+            parameters += $" --username {server.Username} --password {server.Password}";
+        }
 
         var shellResult = await Cli.Wrap("gamedig")
-            .WithArguments($"--type {server.GameType} {server.ConnectionString()}")
+            .WithArguments(parameters)
             .ExecuteBufferedAsync();
         
         _logger.LogDebug(($"Dig output: '{shellResult.StandardOutput.Trim()}'"));

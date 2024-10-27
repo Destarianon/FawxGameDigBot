@@ -20,11 +20,21 @@ In your configuration `appsettings.json` file, the `GameServers` section contain
 + `DiscordChannelId` - The Discord Channel Id of the channel to send up/down notifications to. If this is not defined, no up/down notifications will be sent for this server.
 > [!IMPORTANT]
 > Do not leave this field blank! To properly disable this functionality, either set the Channel Id to `0` or remove the line entirely.
++ `ShowLocked` - Switch to show the current password protection status of the server.
+  + `hide` (or not set) - Do not include the password status on the server title.
+  + `locked` - Show the password status on the server title as a lock emoji, only if it is locked.
+  + `dynamic` - Show the password status on the server title as a lock emoji.
+  + `alwayslocked` - Show the password status as always "locked".
+  + `alwaysunlocked` - Show the password status as always "unlocked".
+  + `text` - Show the password status in text format.
+  + `text_locked` - Show the password status as text only if locked.
++ `ShowDetailedStatus` - Shows an optional status slug next to the server title, content depending on the specific game.
 + `StatusTemplate` - A template string used to format the status message. See [Status Templates](#status-templates) for more information.
 ### Rest APIs
 For servers which require credentials to query, such as Palworld's REST API, credential variables may be included. These will be ignored on unsupported games.
 + `username` - The username to authenticate for querying.
 + `password` - The password to authenticate for querying.
++ `token` - API token to authenticate for querying. (only used for certain titles)
 
 ## Status Templates
 The status template is a string that contains variable placeholders which the bot will replace with data from the monitored server. For example,
@@ -47,6 +57,7 @@ Variables must be in curly braces `{}` and are case sensitive. The following var
 + `ping` - The ping time to the server in milliseconds.
 + `connect` - The connection information for the server. Ex "server.example.org:3000". This will mirror the connection string, so for RCON/API queried servers add this information as text to prevent advertising the wrong port number.
 + `queryPort` - The port number used to query the server for information.
++ `version` - The software version of the server.
 
 Line breaks can be included in the output of the status information using `\n`.
 
@@ -55,8 +66,14 @@ This bot can query any game supported by GameDig. A list of its supported games 
 Some games have extended support for custom fields unique to that title, listed below.
 
 ### Palworld (palworld)
-+ `version` - The software version of the server.
 + `uptime` - The amount of time the server has been online (seconds?).
 + `serverfps` - The current server framerate.
 + Notes:
   + The `password` variable is unsupported at this time and will always return `false`
+
+### Satisfactory
++ `paused` - If the game simulation is paused (all players offline).
++ `running` - If the game session is actively running.
++ `sessionname` - The player defined name of the game session/save.
++ `techtier` - The current tech tier of the game.
++ `sessionstate` - A text representation of the current simulation state. ("Session not started", "Session is paused", "Session is running")

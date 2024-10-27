@@ -1,8 +1,5 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text;
-using System.Xml;
+﻿using System.Text;
 using Discord;
-using Microsoft.Extensions.Options;
 
 namespace FawxGameDigBot;
 
@@ -16,6 +13,7 @@ public static class MessageBuilder {
         builder.Replace("{connect}", response.connect);
         builder.Replace("{ping}", response.ping.ToString());
         builder.Replace("{queryPort}", response.queryPort.ToString());
+        builder.Replace("{version}", response.version);
         var playersString = "[";
         for (int i = 0; i < response.players.Count; i++) {
             playersString += $"{response.players[i]}";
@@ -27,10 +25,15 @@ public static class MessageBuilder {
         builder.Replace("{players}", playersString);
 
         // Game specific fields
-        if (response is PalworldDigResponse tresponse) {
-            builder.Replace("{version}", tresponse.version);
-            builder.Replace("{serverfps}", tresponse.serverfps.ToString());
-            builder.Replace("{uptime}", tresponse.uptime.ToString());
+        if (response is PalworldDigResponse palworld_response) {
+            builder.Replace("{serverfps}", palworld_response.serverfps.ToString());
+            builder.Replace("{uptime}", palworld_response.uptime.ToString());
+        } else if (response is SatisfactoryDigResponse satisfactory_response) {
+            builder.Replace("{sessionname}", satisfactory_response.sessionname);
+            builder.Replace("{techtier}", satisfactory_response.techtier.ToString());
+            builder.Replace("{sessionstate}", satisfactory_response.sessionstate);
+            builder.Replace("{running}", satisfactory_response.running.ToString());
+            builder.Replace("{paused}", satisfactory_response.paused.ToString());
         }
 
         return builder.ToString();
@@ -47,7 +50,30 @@ public static class MessageBuilder {
             string status;
             status = server.Online() ? ":green_square: Online" : ":red_square: Offline";
 
-            embed.AddField($"{server.Name}: {status}", $"```{server.GetEmbedString(server.StatusTemplate,server.LastResponse)}```");
+            // Detailed status message
+            string detailedstatus = "";
+            if (server.ShowDetailedStatus) {
+                if (server.LastResponse != null && server.LastResponse.detailedstatus != null) {
+                    detailedstatus = server.LastResponse.detailedstatus;
+                }
+            }
+
+            // Lock icon based on password protection status
+            string locked = "";
+            if(server.ShowLocked != null && server.LastResponse != null) {
+                locked = server.ShowLocked switch {
+                    "hide" => "",
+                    "locked" => server.LastResponse.password ? ":lock:" : "",
+                    "dynamic" => server.LastResponse.password ? ":lock:" : ":unlock:",
+                    "alwayslocked" => ":lock:",
+                    "alwaysunlocked" => ":unlock:",
+                    "text" => server.LastResponse.password ? "Password protected" : "Open",
+                    "text_locked" => server.LastResponse.password ? "Password protected" : "",
+                    _ => ""
+                };
+            }
+
+            embed.AddField($"{server.Name}: {status} {detailedstatus} {locked}", $"```{server.GetEmbedString(server.StatusTemplate,server.LastResponse)}```");
         }
 
         var colorString = "E67E22";

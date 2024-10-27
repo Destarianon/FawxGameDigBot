@@ -22,15 +22,22 @@ public sealed class GameDig {
         
         const string executableParameters = $"";
         var parameters = $"{executableParameters} --type {server.GameType} {server.ConnectionString()}";
-        if (server.GameType == GameTypes.Palworld) {
+
+        // Add authentication parameters
+        if(!string.IsNullOrEmpty(server.Username) && !string.IsNullOrEmpty(server.Password)) {
             parameters += $" --username {server.Username} --password {server.Password}";
+            _logger.LogDebug($"Using username and password for authentication");
+        }
+        if (!string.IsNullOrEmpty(server.Token)) {
+            parameters += $" --token {server.Token}";
+            _logger.LogDebug($"Using token for authentication");
         }
 
         var shellResult = await Cli.Wrap("gamedig")
             .WithArguments(parameters)
             .ExecuteBufferedAsync();
         
-        _logger.LogDebug(($"Dig output: '{shellResult.StandardOutput.Trim()}'"));
+        _logger.LogDebug($"Dig output: '{shellResult.StandardOutput.Trim()}'");
 
         if (shellResult.ExitCode != 0 || shellResult.StandardOutput.Contains("{\"error\":")) {
             _logger.LogWarning($"Failed to contact server '{server.Name}'!");
@@ -39,6 +46,7 @@ public sealed class GameDig {
         } else {
             response = server.GameType switch {
                 GameTypes.Palworld => JsonSerializer.Deserialize<PalworldDigResponse>(shellResult.StandardOutput),
+                GameTypes.Satisfactory => JsonSerializer.Deserialize<SatisfactoryDigResponse>(shellResult.StandardOutput),
                 _ => JsonSerializer.Deserialize<DigResponse>(shellResult.StandardOutput)
             };
 

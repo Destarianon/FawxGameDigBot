@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using Microsoft.Extensions.Options;
 
 namespace FawxGameDigBot;
 
@@ -12,6 +11,9 @@ public sealed class GameServer() {
     public string StatusTemplate { get; set; } = "";
     public string? Username { get; set; }
     public string? Password { get; set; }
+    public string? Token { get; set; }
+    public string? ShowLocked { get; set; }
+    public bool ShowDetailedStatus { get; set;} = false;
     
 
     [JsonIgnore]

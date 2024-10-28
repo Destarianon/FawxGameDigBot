@@ -53,27 +53,27 @@ public static class MessageBuilder {
             // Detailed status message
             string detailedstatus = "";
             if (server.ShowDetailedStatus) {
-                if (server.LastResponse != null && server.LastResponse.detailedstatus != null) {
-                    detailedstatus = server.LastResponse.detailedstatus;
+                if (server.CurrentResponse != null && server.CurrentResponse.detailedstatus != null) {
+                    detailedstatus = server.CurrentResponse.detailedstatus;
                 }
             }
 
             // Lock icon based on password protection status
             string locked = "";
-            if(server.ShowLocked != null && server.LastResponse != null) {
+            if(server.ShowLocked != null && server.CurrentResponse != null) {
                 locked = server.ShowLocked switch {
                     "hide" => "",
-                    "locked" => server.LastResponse.password ? ":lock:" : "",
-                    "dynamic" => server.LastResponse.password ? ":lock:" : ":unlock:",
+                    "locked" => server.CurrentResponse.password ? ":lock:" : "",
+                    "dynamic" => server.CurrentResponse.password ? ":lock:" : ":unlock:",
                     "alwayslocked" => ":lock:",
                     "alwaysunlocked" => ":unlock:",
-                    "text" => server.LastResponse.password ? "Password protected" : "Open",
-                    "text_locked" => server.LastResponse.password ? "Password protected" : "",
+                    "text" => server.CurrentResponse.password ? "Password protected" : "Open",
+                    "text_locked" => server.CurrentResponse.password ? "Password protected" : "",
                     _ => ""
                 };
             }
 
-            embed.AddField($"{server.Name}: {status} {detailedstatus} {locked}", $"```{server.GetEmbedString(server.StatusTemplate,server.LastResponse)}```");
+            embed.AddField($"{server.Name}: {status} {detailedstatus} {locked}", $"```{server.GetEmbedString(server.StatusTemplate,server.CurrentResponse)}```");
         }
 
         var colorString = "E67E22";

@@ -16,7 +16,7 @@ public static class MessageBuilder {
         builder.Replace("{version}", response.version);
         var playersString = "[";
         for (int i = 0; i < response.players.Count; i++) {
-            playersString += $"{response.players[i]}";
+            playersString += $"{response.players[i].name}";
             if (!(i == response.players.Count - 1)) {
                 playersString += ", ";
             }

@@ -3,6 +3,11 @@ using System.Text.Json.Serialization;
 
 namespace FawxGameDigBot;
 
+public class Player {
+    public string? name { get; set; }
+    public Dictionary<string,object>? raw { get; set; }
+}
+
 public class DigResponse {
     
     [JsonIgnore]
@@ -13,7 +18,7 @@ public class DigResponse {
     public int numplayers { get; set; }
     public int maxplayers { get; set; }
     public string? version { get; set; }
-    public List<string> players { get; set; }
+    public List<Player> players { get; set; }
     public string? connect { get; set; }
     public int ping { get; set; }
     public int queryPort { get; set; }
